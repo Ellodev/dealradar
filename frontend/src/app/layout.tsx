@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { getServerSession } from "next-auth";
+
+import SessionProvider from "./components/SessionProvider";
+import NavMenu from "./components/NavMenu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -17,15 +21,19 @@ export const metadata: Metadata = {
   description: "Price tracking website for Interdiscount",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession();
   return (
       <html lang="en" suppressHydrationWarning>
           <body>
-                  {children}
+              <SessionProvider session={session}>
+                <NavMenu />
+                {children}
+              </SessionProvider>
           </body>
       </html>
   );
