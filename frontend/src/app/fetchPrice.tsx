@@ -29,6 +29,8 @@ export default function Price({ url, session }: PriceProps ) {
 
         fetchPrice();
 
+
+        /*
         const insertUrl = async () => {
             const { data, error } = await supabase
             .from("products")
@@ -48,6 +50,8 @@ export default function Price({ url, session }: PriceProps ) {
 
         insertUrl();
 
+        */
+
         const appendUrlToUser = async () => {
             const { data: userData, error: userError } = await supabase
                 .from("users")
@@ -66,8 +70,6 @@ export default function Price({ url, session }: PriceProps ) {
                 return;
             }
 
-            const productData = await insertUrl();
-
             const { error: linkError } = await supabase.from("productsXusers").insert([
                 {
                     fk_product: data.id,  
@@ -80,9 +82,9 @@ export default function Price({ url, session }: PriceProps ) {
             }
         };
 
-        if (session.user.email !== null && session.user.email) {
-            appendUrlToUser();
-        }
+        if (session && session.user.email) {
+           appendUrlToUser();
+         }
 
         
         
