@@ -5,10 +5,9 @@ import { supabase } from "../../../lib/supabase";
 
 interface PriceProps {
   url: string;
-  session: any;
 }
 
-export default function Price({ url, session }: PriceProps) {
+export default function Price({ url }: PriceProps) {
   const [data, setData] = useState({
     price: "",
     productName: "",
@@ -37,7 +36,7 @@ export default function Price({ url, session }: PriceProps) {
     };
 
     fetchPrice();
-  }, [url, session]);
+  }, [url]);
 
   if (!url || !data.productName || !data.price) {
     return null;

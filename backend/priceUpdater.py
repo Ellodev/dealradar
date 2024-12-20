@@ -3,11 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 import psycopg2
 from config import load_config
-from datetime import datetime
 
 def connect(config):
     try:
-        # connecting to the PostgreSQL server
         with psycopg2.connect(**config) as conn:
             print('Connected to the PostgreSQL server.')
             return conn

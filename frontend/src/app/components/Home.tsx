@@ -1,9 +1,9 @@
 "use client";
 
-import Price from './fetchPrice'; 
+import Price from './fetchPrice'; // Adjust the path if needed
 import { useState } from 'react';
-import { supabase } from "../../../lib/supabase";
-import AddToWishlist from './AddToWishlist'; 
+import { supabase } from "../../../lib/supabase"; // Supabase client
+import AddToWishlist from './AddToWishlist';
 
 export default function Home({ session }: { session: any }) {
   const [url, setUrl] = useState('');
@@ -60,7 +60,7 @@ export default function Home({ session }: { session: any }) {
           Submit
         </button>
       </form>
-      <Price url={url} session={session} />
+      <Price url={url} />
       <AddToWishlist url={url} session={session} />
     </div>
   );
