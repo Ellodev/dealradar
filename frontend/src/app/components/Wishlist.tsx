@@ -62,7 +62,7 @@ export default function Wishlist({ session }: { session: any }) {
         <ul>
           {products.map((product) => (
             <li key={product.id}>
-              <strong>URL:</strong> {product.url} | <strong>Price:</strong> {product.price}
+              <a href={product.url} target="_blank"><strong>{product.product_name}</strong></a> | <strong>Price:</strong> {product.price}
             </li>
           ))}
         </ul>

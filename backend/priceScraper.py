@@ -24,7 +24,7 @@ if __name__ == '__main__':
 app = Flask(__name__)
 CORS(app)
 
-def insert_data(url, price):
+def insert_data(url, price, productName):
 
     def check_url(url):
         sql = """SELECT * FROM products WHERE url = %s"""
@@ -42,14 +42,14 @@ def insert_data(url, price):
     if check_url(url):
         return        
 
-    sql = """INSERT INTO products (url, price) VALUES (%s, %s)"""
+    sql = """INSERT INTO products (url, price, product_name) VALUES (%s, %s, %s)"""
 
     config = load_config()
 
     try: 
         with psycopg2.connect(**config) as conn:
             with conn.cursor() as cur:
-                cur.execute(sql, (url, price))
+                cur.execute(sql, (url, price, productName))
                 conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -73,19 +73,27 @@ def scrape_price():
     soup = BeautifulSoup(response.content, "lxml")
     price_element = soup.find(attrs={"data-testid": "product-price"})
 
+    productName_element = soup.find(attrs={"class": "text-text-default-primary text-3xl lg:text-4xl font-secondary"})
+
+    if productName_element:
+        productName = productName_element.text.strip()
+        
+
     if price_element:
         full_price_text = price_element.text.strip()
         match = re.search(r"\d+[\’']?\d*\.\d{2}", full_price_text)
         if match:
             first_price = match.group().replace("’", "").replace("'", "")
 
-            insert_data(url, first_price)
+            insert_data(url, first_price, productName)
 
-            return jsonify({"price": first_price})
+            return jsonify({"price": first_price, "productName": productName})
         else:
             return jsonify({"error": "No valid price found"}), 404
     else:
         return jsonify({"error": "Price element not found"}), 404
+    
+    
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)

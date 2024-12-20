@@ -1,8 +1,9 @@
 "use client";
 
-import Price from '../fetchPrice'; // Adjust the path if needed
+import Price from './fetchPrice'; 
 import { useState } from 'react';
-import { supabase } from "../../../lib/supabase"; // Supabase client
+import { supabase } from "../../../lib/supabase";
+import AddToWishlist from './AddToWishlist'; 
 
 export default function Home({ session }: { session: any }) {
   const [url, setUrl] = useState('');
@@ -13,8 +14,6 @@ export default function Home({ session }: { session: any }) {
     const formData = new FormData(event.currentTarget);
     const userQuery = formData.get('query') as string;
     setUrl(userQuery);
-
-    console.log("Home component")
 
     if (session?.user?.email) {
       const { data, error } = await supabase
@@ -62,6 +61,7 @@ export default function Home({ session }: { session: any }) {
         </button>
       </form>
       <Price url={url} session={session} />
+      <AddToWishlist url={url} session={session} />
     </div>
   );
 }
