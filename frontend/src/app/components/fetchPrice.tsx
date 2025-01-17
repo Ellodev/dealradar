@@ -17,7 +17,7 @@ export default function Price({ url }: PriceProps) {
     const fetchPrice = async () => {
       if (url) {
         try {
-          const response = await fetch(`http://127.0.0.1:5000/scrape-price?url=${url}`);
+          const response = await fetch(`http://16.171.30.63:5000/scrape-price?url=${url}`);
           const result = await response.json();
           
           if (result.price && result.productName && result.productDescription) {
