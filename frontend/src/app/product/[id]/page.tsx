@@ -1,5 +1,6 @@
 import { supabase } from "../../../../lib/supabase";
 import Price from "../../components/fetchPrice";
+import PriceHistory from "../../components/priceHistory";
 
 export default async function Product({
     params,
@@ -14,16 +15,10 @@ export default async function Product({
         .eq("id", id)
         .single();
 
-    const { data: priceHistoryData, error: priceHistoryError } = await supabase
-        .from("price")
-        .select("*")
-        .eq("product_id", id )
-
-    console.log(data, error)    
-
     return (
     <div>
         <Price url={data.url} />
+        <PriceHistory id={data.id} />
     </div>
     )
   }
