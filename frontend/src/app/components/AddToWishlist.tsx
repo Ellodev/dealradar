@@ -2,11 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "../../../lib/supabase";
+import { Database } from '../../../types/supabase';
 
 interface WishlistProps {
   url: string;
-  session: any;
+  session: Session;
 }
+
+import { Session } from '../../../types/types';
 
 export default function AddToWishlist({ url, session }: WishlistProps) {
   const [isLoading, setIsLoading] = useState(false);

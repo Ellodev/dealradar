@@ -1,8 +1,6 @@
 import NextAuth  from "next-auth";
 import GithubProvider from "next-auth/providers/github"
 
-import { supabase } from "../../../../../lib/supabase";
-
 export const authOptions = {
     providers: [GithubProvider({
         clientId: process.env.GITHUB_ID ?? "",

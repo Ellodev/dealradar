@@ -1,10 +1,19 @@
 "use client";
-
 import { useState, useEffect } from "react";
-import { supabase } from "../../../lib/supabase"; 
+import { supabase } from "../../../lib/supabase";
+import { Database } from '../../../types/supabase';
 
-export default function Wishlist({ session }: { session: any }) {
-  const [products, setProducts] = useState<any[]>([]); 
+import { Session } from '../../../types/types';
+
+type Product = Database['public']['Tables']['products']['Row'];
+
+type ProductLink = {
+  fk_product: number;
+}
+
+
+export default function Wishlist({ session }: { session: Session }) {
+  const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -12,7 +21,6 @@ export default function Wishlist({ session }: { session: any }) {
         console.error("Session not available");
         return;
       }
-
       try {
         const { data: userData, error: userError } = await supabase
           .from("users")
@@ -20,7 +28,7 @@ export default function Wishlist({ session }: { session: any }) {
           .eq("email", session.user.email)
           .single();
 
-        if (userError) {
+        if (userError || !userData) {
           console.error("Error fetching user:", userError);
           return;
         }
@@ -28,14 +36,15 @@ export default function Wishlist({ session }: { session: any }) {
         const { data: productLinks, error: productError } = await supabase
           .from("productsXusers")
           .select("fk_product")
-          .eq("fk_user", userData?.id);
+          .eq("fk_user", userData.id);
 
-        if (productError) {
+        if (productError || !productLinks) {
           console.error("Error fetching product links:", productError);
           return;
         }
 
-        const productIds = productLinks.map((link: any) => link.fk_product);
+        const productIds = productLinks.map((link: ProductLink) => link.fk_product);
+
         const { data: productsData, error: productsError } = await supabase
           .from("products")
           .select("*")
@@ -51,9 +60,8 @@ export default function Wishlist({ session }: { session: any }) {
         console.error("Error fetching wishlist products:", error);
       }
     };
-
     getProducts();
-  }, [session]); 
+  }, [session]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
@@ -62,7 +70,10 @@ export default function Wishlist({ session }: { session: any }) {
         <ul>
           {products.map((product) => (
             <li key={product.id}>
-              <a href={product.url} target="_blank"><strong>{product.product_name}</strong></a> | <strong>Price:</strong> {product.price}
+              <a href={product.url} target="_blank" rel="noopener noreferrer">
+                <strong>{product.product_name}</strong>
+              </a>{" "}
+              | <strong>Price:</strong> {product.price}
             </li>
           ))}
         </ul>
