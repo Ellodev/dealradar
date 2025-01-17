@@ -70,7 +70,7 @@ export default function Wishlist({ session }: { session: Session }) {
         <ul>
           {products.map((product) => (
             <li key={product.id}>
-              <a href={product.url} target="_blank" rel="noopener noreferrer">
+              <a href={`/product/${product.id}`} rel="noopener noreferrer">
                 <strong>{product.product_name}</strong>
               </a>{" "}
               | <strong>Price:</strong> {product.price}

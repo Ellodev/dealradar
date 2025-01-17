@@ -16,7 +16,7 @@ interface ChartProps {
 
 export function Chart({ data }: ChartProps) {
   return (
-    <div style={{ width: "100%", height: 300 }}>
+    <div style={{ width: "100%", height: 300, minWidth: 800 }}>
       <ResponsiveContainer>
         <LineChart
           data={data}

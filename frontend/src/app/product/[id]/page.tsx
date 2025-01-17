@@ -1,5 +1,4 @@
 import { supabase } from "../../../../lib/supabase";
-import Price from "../../components/fetchPrice";
 import PriceHistory from "../../components/priceHistory";
 
 export default async function Product({
@@ -16,8 +15,11 @@ export default async function Product({
         .single();
 
     return (
-    <div>
-        <Price url={data.url} />
+    <div className='flex flex-col items-center justify-center min-h-screen py-2'>
+        <a href={data.url} rel="noopener noreferrer" className='mb-2 text-2xl'>
+          <strong>{data.product_name}</strong>
+        </a>{" "}
+          <strong>Price:</strong> {data.price}
         <PriceHistory id={data.id} />
     </div>
     )

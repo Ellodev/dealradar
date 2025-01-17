@@ -33,7 +33,7 @@ export default function PriceHistory({ id }: PriceHistoryProps) {
   }, [id]);
 
   return (
-    <div>
+    <div min-width="70%">
       {priceData.length > 0 ? (
         <Chart data={priceData} />
       ) : (

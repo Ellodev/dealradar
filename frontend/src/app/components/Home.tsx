@@ -53,7 +53,7 @@ export default function Home({ session }: { session: Session }) {
           name="query"
           type="text"
           placeholder="Enter product URL"
-          className="p-3 rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all"
+          className="p-3 text-black rounded-lg border border-gray-300 shadow-md focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all"
         />
         <button
           type="submit"
