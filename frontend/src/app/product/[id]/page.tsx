@@ -9,7 +9,7 @@ export default async function Product({
   }) {
     const id = (await params).id
 
-    const { data, error } = await supabase
+    const { data } = await supabase
         .from("products")
         .select("*")
         .eq("id", id)
