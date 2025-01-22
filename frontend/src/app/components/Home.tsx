@@ -40,11 +40,18 @@ export default function Home({ session }: { session: Session | null }) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1 className="text-9xl font-semibold z-10">DealRadar</h1>
-      <p className="z-10 mt-3 text-2xl">A Place where you can grab the best deal for the product you’ve been looking at (if its from interdiscount)</p>
+    <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+      <h1 className="text-4xl sm:text-6xl lg:text-9xl font-semibold text-center z-10">
+        DealRadar
+      </h1>
+      <p className="z-10 mt-3 text-lg sm:text-xl lg:text-2xl text-center">
+        A Place where you can grab the best deal for the product you’ve been looking at (if it's from Interdiscount)
+      </p>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
+      <form
+        onSubmit={handleSubmit}
+        className="mt-6 flex flex-col gap-4 w-full max-w-md"
+      >
         <input
           name="query"
           type="text"
@@ -58,8 +65,9 @@ export default function Home({ session }: { session: Session | null }) {
           Submit
         </button>
       </form>
+
       {!session ? (
-        <p className="text-red-500 mt-4">
+        <p className="text-red-500 mt-4 text-center">
           Please sign in to save your wishlist and track deals.
         </p>
       ) : (
