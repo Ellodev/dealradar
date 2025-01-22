@@ -42,7 +42,7 @@ export default function Home({ session }: { session: Session | null }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">
       <h1 className="text-9xl font-semibold z-10">DealRadar</h1>
-      <p className="z-10 mt-3 text-2xl">A Place where you can grab the best deal for the product you’ve been looking at</p>
+      <p className="z-10 mt-3 text-2xl">A Place where you can grab the best deal for the product you’ve been looking at (if its from interdiscount)</p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4">
         <input
