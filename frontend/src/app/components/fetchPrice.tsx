@@ -21,7 +21,7 @@ export default function Price({ url }: PriceProps) {
     const fetchPrice = async () => {
       if (url) {
         try {
-          const response = await fetch(`http://localhost:5000/scrape-price?url=${url}`);
+          const response = await fetch(`https://server.dealradar.technify.app/scrape-price?url=${url}`);
           const result = await response.json();
           
           if (result.price && result.productName && result.productDescription && result.image) {
