@@ -24,7 +24,7 @@ if __name__ == '__main__':
 app = Flask(__name__)
 CORS(app)
 
-def insert_data(url, price, productName, productDescription):
+def insert_data(url, price, productName, productDescription, image):
 
     def check_url(url):
         sql = """SELECT * FROM products WHERE url = %s"""
@@ -42,14 +42,14 @@ def insert_data(url, price, productName, productDescription):
     if check_url(url):
         return        
 
-    sql = """INSERT INTO products (url, price, product_name, product_description) VALUES (%s, %s, %s, %s)"""
+    sql = """INSERT INTO products (url, price, product_name, product_description, image) VALUES (%s, %s, %s, %s, %s)"""
 
     config = load_config()
 
     try: 
         with psycopg2.connect(**config) as conn:
             with conn.cursor() as cur:
-                cur.execute(sql, (url, price, productName, productDescription))
+                cur.execute(sql, (url, price, productName, productDescription, image))
                 conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print(error)
@@ -70,7 +70,7 @@ def scrape_price():
     except requests.RequestException as e:
         return jsonify({"error": f"Failed to fetch URL: {e}"}), 500
 
-    soup = BeautifulSoup(response.content, "lxml")
+    soup = BeautifulSoup(response.content, "html.parser")
     price_element = soup.find(attrs={"data-testid": "product-price"})
 
     productName_element = soup.find(attrs={"class": "text-text-default-primary text-3xl lg:text-4xl font-secondary"})
@@ -82,7 +82,15 @@ def scrape_price():
 
     if productDescription_element:
         productDescription = productDescription_element.text.strip()
-        
+
+    productImages = [img['src'] for img in soup.find_all(attrs={"class": "mx-auto object-contain p-2"}) if 'src' in img.attrs]
+    primaryImageWithoutUrl = productImages[0] if productImages else None
+    additionalImages = productImages[1:] if len(productImages) > 1 else []
+
+    primaryImage = "https://www.interdiscount.ch" + primaryImageWithoutUrl
+
+    print("Primary Image:", primaryImage)
+    print("Additional Images:", additionalImages)
 
     if price_element:
         full_price_text = price_element.text.strip()
@@ -90,9 +98,9 @@ def scrape_price():
         if match:
             first_price = match.group().replace("’", "").replace("'", "")
 
-            insert_data(url, first_price, productName, productDescription)
+            insert_data(url, first_price, productName, productDescription, primaryImage)
 
-            return jsonify({"price": first_price, "productName": productName, "productDescription": productDescription})
+            return jsonify({"price": first_price, "productName": productName, "productDescription": productDescription, "image": primaryImage})
         else:
             return jsonify({"error": "No valid price found"}), 404
     else:
@@ -101,4 +109,4 @@ def scrape_price():
     
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(debug=True, host="0.0.0.0", port=5000)

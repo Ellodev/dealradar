@@ -12,6 +12,7 @@ export default function Price({ url }: PriceProps) {
     price: "",
     productName: "",
     productDescription: "",
+    image: "",
   });
 
   const [productsData, setProductsData] = useState<{ id: string } | null>(null);
@@ -20,10 +21,10 @@ export default function Price({ url }: PriceProps) {
     const fetchPrice = async () => {
       if (url) {
         try {
-          const response = await fetch(`https://server.dealradar.technify.app/scrape-price?url=${url}`);
+          const response = await fetch(`http://localhost:5000/scrape-price?url=${url}`);
           const result = await response.json();
           
-          if (result.price && result.productName && result.productDescription) {
+          if (result.price && result.productName && result.productDescription && result.image) {
             setData(result);
 
             const { data: productsData, error: productsError } = await supabase
@@ -40,14 +41,14 @@ export default function Price({ url }: PriceProps) {
             setProductsData(productsData)
 
           } else {
-            setData({ price: "", productName: "", productDescription: "" });
+            setData({ price: "", productName: "", productDescription: "", image: "" });
           }
         } catch (error) {
-          setData({ price: "", productName: "", productDescription: "" });
+          setData({ price: "", productName: "", productDescription: "", image: "" });
           console.error("Error fetching price", error);
         }
       } else {
-        setData({ price: "", productName: "", productDescription: "" });
+        setData({ price: "", productName: "", productDescription: "", image: "" });
       }
     };
 
@@ -60,6 +61,7 @@ export default function Price({ url }: PriceProps) {
 
   return (
     <div>
+      <img src={data.image} className="max-width: 200px max-height: 200px"></img>
       {productsData?.id ? (
         <a href={`/product/${productsData.id}`}><p>{data.productName}</p></a>
       ) : (
