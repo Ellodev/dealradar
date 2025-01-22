@@ -7,7 +7,7 @@ import AddToWishlist from './AddToWishlist';
 
 import { Session } from '../../../types/types';
 
-export default function Home({ session }: { session: Session }) {
+export default function Home({ session }: { session: Session | null }) {
   const [url, setUrl] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -34,12 +34,8 @@ export default function Home({ session }: { session: Session }) {
 
         if (insertError) {
           console.error("Error adding user:", insertError);
-        } else {
-          console.log("User added successfully!");
         }
-      } else {
-        console.log("User already exists:", data);
-      }
+      } 
     }
   };
 
@@ -62,8 +58,16 @@ export default function Home({ session }: { session: Session }) {
           Submit
         </button>
       </form>
+      {!session ? (
+        <p className="text-red-500 mt-4">
+          Please sign in to save your wishlist and track deals.
+        </p>
+      ) : (
+        <>
+          <AddToWishlist url={url} session={session} />
+        </>
+      )}
       <Price url={url} />
-      <AddToWishlist url={url} session={session} />
     </div>
   );
 }

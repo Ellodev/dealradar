@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { supabase } from "../../../lib/supabase";
 
 interface PriceProps {
   url: string;
@@ -13,6 +14,8 @@ export default function Price({ url }: PriceProps) {
     productDescription: "",
   });
 
+  const [productsData, setProductsData] = useState<{ id: string } | null>(null);
+
   useEffect(() => {
     const fetchPrice = async () => {
       if (url) {
@@ -22,6 +25,20 @@ export default function Price({ url }: PriceProps) {
           
           if (result.price && result.productName && result.productDescription) {
             setData(result);
+
+            const { data: productsData, error: productsError } = await supabase
+                      .from("products")
+                      .select("*")
+                      .eq("url", url)
+                      .single();
+
+            if (productsError) {
+              console.error("Error fetching products:", productsError);
+              return;
+            }
+
+            setProductsData(productsData)
+
           } else {
             setData({ price: "", productName: "", productDescription: "" });
           }
@@ -43,8 +60,11 @@ export default function Price({ url }: PriceProps) {
 
   return (
     <div>
-      <h1>Product Name</h1>
-      <p>{data.productName}</p>
+      {productsData?.id ? (
+        <a href={`/product/${productsData.id}`}><p>{data.productName}</p></a>
+      ) : (
+        <p>{data.productName}</p>
+      )}
       <h1>Price</h1>
       <p>{data.price}</p>
     </div>

@@ -21,6 +21,7 @@ export default async function Product({
         </a>{" "}
           <strong>Price:</strong> {data.price}
         <PriceHistory id={data.id} />
+        <p>Product Description:</p> {data.product_description}
     </div>
     )
   }
