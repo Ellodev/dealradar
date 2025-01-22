@@ -47,8 +47,6 @@ export default function Price({ url }: PriceProps) {
       <p>{data.productName}</p>
       <h1>Price</h1>
       <p>{data.price}</p>
-      <h1>Product Description</h1>
-      <p>{data.productDescription}</p>
     </div>
   );
 }
