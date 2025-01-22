@@ -86,7 +86,7 @@ def scrape_price():
 
     if price_element:
         full_price_text = price_element.text.strip()
-        match = re.search(r"\d+[\’']?\d*\.\d{2}", full_price_text)
+        match = re.search(r"\d+[’']?\d*(?:\.\d{2})?(?:–)?(?:\sstatt\s\d+[’']?\d*(?:\.\d{2})?(?:–)?)?", full_price_text)
         if match:
             first_price = match.group().replace("’", "").replace("'", "")
 
