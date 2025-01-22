@@ -15,7 +15,36 @@ type ProductLink = {
 export default function Wishlist({ session }: { session: Session }) {
   const [products, setProducts] = useState<Product[]>([]);
 
-  useEffect(() => {
+    const removeProduct = async (id: number) => {
+      if (!session || !session.user) {
+        console.error("Session not available");
+        return;
+      }
+  
+      const { data: userData, error: userError } = await supabase
+      .from("users")
+      .select("id")
+      .eq("email", session.user.email)
+      .single();
+  
+      if (userError || !userData) {
+        console.error("Error fetching user:", userError);
+        return;
+      }
+  
+      const { error: deleteError } = await supabase
+        .from("productsXusers")
+        .delete()
+        .eq("fk_user", userData.id)
+        .eq("fk_product", id);
+  
+      if (deleteError) {
+        console.error("error deleting data")
+      }
+  
+      getProducts();
+    }
+
     const getProducts = async () => {
       if (!session || !session.user) {
         console.error("Session not available");
@@ -60,6 +89,7 @@ export default function Wishlist({ session }: { session: Session }) {
         console.error("Error fetching wishlist products:", error);
       }
     };
+    useEffect(() => {
     getProducts();
   }, [session]);
 
@@ -74,6 +104,8 @@ export default function Wishlist({ session }: { session: Session }) {
                 <strong>{product.product_name}</strong>
               </a>{" "}
               | <strong>Price:</strong> {product.price}
+              {" "}|{" "}
+              <button onClick={() => removeProduct(product.id)} className="text-red-400">Remove from Wishlist</button>
             </li>
           ))}
         </ul>
