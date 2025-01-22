@@ -45,7 +45,7 @@ export default function Home({ session }: { session: Session | null }) {
         DealRadar
       </h1>
       <p className="z-10 mt-3 text-lg sm:text-xl lg:text-2xl text-center">
-        A Place where you can grab the best deal for the product you’ve been looking at (if it's from Interdiscount)
+        A Place where you can grab the best deal for the product you&apos;ve been looking at (if it's from Interdiscount)
       </p>
 
       <form
