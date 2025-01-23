@@ -75,7 +75,7 @@ export default function AddToWishlist({ url, session }: WishlistProps) {
         <button
           onClick={appendUrlToUser}
           disabled={isLoading}
-          className="p-3 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 focus:ring-2 focus:ring-black transition-all"
+          className="p-3 rounded-lg bg-black text-white font-semibold hover:bg-gray-800 focus:ring-2 focus:ring-black transition-all mt-4"
         >
           {isLoading ? "Adding..." : "Add to Wishlist"}
         </button>
