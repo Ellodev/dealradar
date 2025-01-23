@@ -23,26 +23,26 @@ export default function Price({ url }: PriceProps) {
         try {
           const response = await fetch(`https://server.dealradar.technify.app/scrape-price?url=${url}`);
           const result = await response.json();
-          
-          if (result.price && result.productName && result.productDescription && result.image) {
-            setData(result);
 
-            const { data: productsData, error: productsError } = await supabase
-                      .from("products")
-                      .select("*")
-                      .eq("url", url)
-                      .single();
+          setData({
+            price: result.price || "",
+            productName: result.productName || "",
+            productDescription: result.productDescription || "",
+            image: result.image || "",
+          });
 
-            if (productsError) {
-              console.error("Error fetching products:", productsError);
-              return;
-            }
+          const { data: productsData, error: productsError } = await supabase
+            .from("products")
+            .select("*")
+            .eq("url", url)
+            .single();
 
-            setProductsData(productsData)
-
-          } else {
-            setData({ price: "", productName: "", productDescription: "", image: "" });
+          if (productsError) {
+            console.error("Error fetching products:", productsError);
+            return;
           }
+
+          setProductsData(productsData);
         } catch (error) {
           setData({ price: "", productName: "", productDescription: "", image: "" });
           console.error("Error fetching price", error);
@@ -55,20 +55,34 @@ export default function Price({ url }: PriceProps) {
     fetchPrice();
   }, [url]);
 
-  if (!url || !data.productName || !data.price) {
+  if (!url) {
     return null;
   }
 
   return (
     <div>
-      <img src={data.image} className="max-width: 200px max-height: 200px"></img>
-      {productsData?.id ? (
-        <a href={`/product/${productsData.id}`}><p>{data.productName}</p></a>
+      {data.image && <img src={data.image} alt={data.productName} style={{ maxWidth: "200px", maxHeight: "200px" }} />}
+      {data.productName ? (
+        productsData?.id ? (
+          <a href={`/product/${productsData.id}`}><p>{data.productName}</p></a>
+        ) : (
+          <p>{data.productName}</p>
+        )
       ) : (
-        <p>{data.productName}</p>
+        <p>Product name not available</p>
       )}
-      <h1>Price</h1>
-      <p>{data.price}</p>
+      {data.price && (
+        <div>
+          <h1>Price</h1>
+          <p>{data.price}</p>
+        </div>
+      )}
+      {data.productDescription && (
+        <div>
+          <h1>Description</h1>
+          <p>{data.productDescription}</p>
+        </div>
+      )}
     </div>
   );
 }
