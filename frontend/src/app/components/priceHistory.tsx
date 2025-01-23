@@ -37,7 +37,7 @@ export default function PriceHistory({ id }: PriceHistoryProps) {
       {priceData.length > 0 ? (
         <Chart data={priceData} />
       ) : (
-        <p>Loading price history...</p>
+        <p>Loading price history... (if the Product is new in the Database it may take a day to start logging)</p>
       )}
     </div>
   );
